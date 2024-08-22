@@ -2,6 +2,16 @@ let pokemonRepository = (function () {
     let pokemonList = [];
     let apiUrl = 'https://pokeapi.co/api/v2/pokemon/?limit=150' ;
 
+        function showLoadingMessage() {
+            let loadingMessageElement = document.getElementById('loading-message');
+                loadingMessageElement.style.display = 'block';
+        }
+
+        function hideLoadingMessage() {
+            let loadingMessageElement = document.getElementById('loading-message');
+            loadingMessageElement.style.display = 'none';
+        }
+
     function add(pokemon) {
         if (
             typeof pokemon === 'object' &&
@@ -25,6 +35,9 @@ let pokemonRepository = (function () {
         button.classList.add('pokemon-button')
         listItem.appendChild(button);
         pokemonList.appendChild(listItem);
+        button.addEventListener('click', function(event) {
+        pokemonRepository.showDetails(pokemon);
+        })
     }
 
         function loadList() {
@@ -37,23 +50,42 @@ let pokemonRepository = (function () {
                         detailsUrl: item.url
                     };
                     add(pokemon);
+                    console.log(pokemon)
                 });
             }).catch(function (e) {
                 console.error(e);
             })
         }
+
+        function loadDetails(item){ 
+            let url = item.detailsUrl;
+            return fetch(url).then(function (response) {
+                return response.json();
+            }).then(function (details) {
+                item.imageUrl = details.sprites.front_default;
+                item.height = detils.height;
+                item.types = details.types;
+            }).catch(function (e) {
+                console.error(e);
+            });
+        }        
+
+        function showDetails(pokemon) {
+            loadDetails(pokemon).then(function () {
+                console.log(pokemon);
+            });
+        }
+
     return{
         add: add,
         getAll: getAll,
         addListItem: addListItem,
-        loadList: loadList
+        loadList: loadList,
+        loadDetails: loadDetails,
+        showDetails: showDetails
     };
     })();
 
-    pokemonRepository.add({ name: 'Bulbasaur', height: 2.4, types: ['grass, poison'] });
-
-    // console.log(pokemonRepository.getAll())
-    
     pokemonRepository.loadList().then(function() { 
         pokemonRepository.getAll().forEach(function (pokemon) {
             pokemonRepository.addListItem(pokemon);
