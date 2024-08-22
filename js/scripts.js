@@ -1,22 +1,20 @@
 let pokemonRepository = (function () {
+    let pokemonList = [];
+    let apiUrl = 'https://pokeapi.co/api/v2/pokemon/?limit=150' ;
 
-    let repository = [
-        
-    ];
     function add(pokemon) {
         if (
             typeof pokemon === 'object' &&
             'name' in pokemon &&
-            'height' in pokemon &&
-            'types' in pokemon
+            'detailsUrl' in pokemon
         ) {
-            repository.push(pokemon);
+            pokemonList.push(pokemon);
         } else {
             console.log('pokemon not found');
         }
     }
     function getAll() {
-        return repository;
+        return pokemonList;
     }
 
     function addListItem(pokemon){
@@ -28,17 +26,36 @@ let pokemonRepository = (function () {
         listItem.appendChild(button);
         pokemonList.appendChild(listItem);
     }
+
+        function loadList() {
+            return fetch(apiUrl).then(function (response) {
+                return response.json();
+            }).then(function (json) {
+                json.results.forEach(function (item) {
+                    let pokemon = {
+                        name: item.name,
+                        detailsUrl: item.url
+                    };
+                    add(pokemon);
+                });
+            }).catch(function (e) {
+                console.error(e);
+            })
+        }
     return{
         add: add,
         getAll: getAll,
-        addListItem: addListItem
+        addListItem: addListItem,
+        loadList: loadList
     };
     })();
 
     pokemonRepository.add({ name: 'Bulbasaur', height: 2.4, types: ['grass, poison'] });
 
-    console.log(pokemonRepository.getAll())
+    // console.log(pokemonRepository.getAll())
     
-    pokemonRepository.getAll().forEach(function (pokemon) {
-        pokemonRepository.addListItem(pokemon);
+    pokemonRepository.loadList().then(function() { 
+        pokemonRepository.getAll().forEach(function (pokemon) {
+            pokemonRepository.addListItem(pokemon);
+    }); 
     });
