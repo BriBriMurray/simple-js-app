@@ -15,3 +15,46 @@
     color:rgb(12, 12, 12);
     border: 2px solid green;
 }
+
+.pokemon-info:hover .modal-close:hover {
+    cursor: pointer;
+}
+
+#modal-container {
+    display: none;
+}
+
+#modal-container.is-visible {
+    position: fixed;
+    padding: 20px;
+    box-sizing: border-box;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgb(from 0 0 0 0.5);
+    z-index: 999;
+    overflow: auto;
+    display: grid;
+    text-align: center;
+}
+
+.modal {
+    margin: auto;
+    display: inline-block;
+    box-sizing: border-box;
+    background: #fff;
+    padding-top: 5px;
+    width: 40%;
+    max-width: 700px;
+    text-align: center;
+    border: solid black 2px;
+}
+
+.modal-close {
+    float: right;
+    border: 0;
+    background: none;
+    color: #777;
+    text-decoration: underline;
+}
