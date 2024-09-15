@@ -3,16 +3,6 @@ let pokemonRepository = (function () {
     let apiUrl = 'https://pokeapi.co/api/v2/pokemon/?limit=150' ;
     
 
-        function showLoadingMessage() {
-            let loadingMessageElement = document.getElementById('loading-message');
-                loadingMessageElement.style.display = 'block';
-        }
-
-        function hideLoadingMessage() {
-            let loadingMessageElement = document.getElementById('loading-message');
-            loadingMessageElement.style.display = 'none';
-        }
-
     function add(pokemon) {
         if (
             typeof pokemon === 'object' &&
